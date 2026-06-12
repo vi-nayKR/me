@@ -95,21 +95,16 @@ import { TiltDirective } from '../../directives/tilt.directive';
             </div>
           </div>
 
-          <!-- Right Content: Eagle Wallpaper Showcase (5 columns) -->
-          <div class="md:col-span-5 relative group">
-            <!-- Backlight glow -->
-            <div class="absolute inset-0 bg-[#ff007f]/20 opacity-30 blur-3xl rounded-full scale-75 group-hover:scale-95 transition-transform duration-700 pointer-events-none"></div>
-            
+          <!-- Right Content: Desk & Wallpaper Showcase (5 columns) -->
+          <div class="md:col-span-5 space-y-6">
+            <!-- Wallpaper Card -->
             <div
               appTilt
-              [maxTilt]="8"
-              [scale]="1.04"
-              [glowColor]="'rgba(255, 0, 127, 0.2)'"
-              class="apple-glass rounded-2xl overflow-hidden border border-[#ff007f]/30 p-3 bg-void/50 cursor-pointer shadow-2xl relative"
+              [maxTilt]="6"
+              [scale]="1.03"
+              [glowColor]="'rgba(255, 0, 127, 0.15)'"
+              class="apple-glass rounded-2xl overflow-hidden border border-[#ff007f]/20 p-3 bg-void/50 cursor-pointer shadow-xl relative group"
             >
-              <!-- Glowing neon pink outline -->
-              <div class="absolute inset-0 bg-gradient-to-tr from-[#ff007f]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-
               <div class="relative overflow-hidden rounded-xl aspect-[16/9]">
                 <img
                   src="garuda-linux.jpg"
@@ -117,14 +112,42 @@ import { TiltDirective } from '../../directives/tilt.directive';
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
-              <div class="mt-4 p-2 flex items-center justify-between">
+              <div class="mt-3 p-1 flex items-center justify-between">
                 <div>
-                  <h4 class="text-sm font-bold text-frost">Garuda Eagle Wallpaper</h4>
-                  <p class="text-[10px] text-muted font-mono mt-0.5">Signature neon eagle visual</p>
+                  <h4 class="text-xs font-bold text-frost">Garuda Eagle Wallpaper</h4>
+                  <p class="text-[9px] text-muted font-mono mt-0.5">Signature neon eagle visual theme</p>
                 </div>
-                <div class="w-8 h-8 rounded-full bg-[#ff007f]/10 flex items-center justify-center border border-[#ff007f]/20">
-                  <svg class="w-4 h-4 text-[#ff007f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <div class="w-6 h-6 rounded-full bg-[#ff007f]/10 flex items-center justify-center border border-[#ff007f]/20">
+                  <svg class="w-3.5 h-3.5 text-[#ff007f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Setup Card -->
+            <div
+              appTilt
+              [maxTilt]="6"
+              [scale]="1.03"
+              [glowColor]="'rgba(255, 107, 0, 0.15)'"
+              class="apple-glass rounded-2xl overflow-hidden border border-border/30 p-3 bg-void/50 cursor-pointer shadow-xl relative group"
+            >
+              <div class="relative overflow-hidden rounded-xl h-48 md:h-56">
+                <img
+                  src="desk-setup.png"
+                  alt="Vinay Desk Setup with Garuda Linux"
+                  class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div class="mt-3 p-1 flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-frost">My Daily Workspace</h4>
+                  <p class="text-[9px] text-muted font-mono mt-0.5">Custom desk setup running Garuda OS</p>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center border border-accent/20">
+                  <svg class="w-3.5 h-3.5 text-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                   </svg>
                 </div>
               </div>
