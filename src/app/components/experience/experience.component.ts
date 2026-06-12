@@ -1,0 +1,204 @@
+import { Component, OnInit, signal, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TiltDirective } from '../../directives/tilt.directive';
+
+@Component({
+  selector: 'app-experience',
+  standalone: true,
+  imports: [CommonModule, TiltDirective],
+  template: `
+    <section id="experience" class="relative py-16 md:py-32 px-4 md:px-6 overflow-hidden">
+      <!-- Parallax background accent -->
+      <div
+        class="absolute right-0 top-0 w-px h-full bg-gradient-to-b from-transparent via-accent/20 to-transparent pointer-events-none"
+        [style.transform]="'translateY(' + (-parallaxOffset()) + 'px)'"
+      ></div>
+
+      <!-- Large Background Outline Typography -->
+      <div
+        class="absolute left-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        [style.transform]="'translate3d(' + (parallaxOffset() * 1.1) + 'px, 0, 0)'"
+      >
+        JOURNEY
+      </div>
+
+      <div class="relative z-10 max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="text-accent font-mono text-xs tracking-widest uppercase mb-4">Career Journey</p>
+          <h2 class="text-4xl md:text-5xl font-display font-bold text-frost text-balance">
+            Work Experience
+          </h2>
+        </div>
+
+        <!-- Timeline -->
+        <div class="relative">
+          <!-- Vertical base line -->
+          <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-accent/20 via-accent/10 to-transparent"></div>
+
+          <!-- Dynamic glowing progress line -->
+          <div
+            class="timeline-progress-line"
+            [style.height.%]="timelineProgress()"
+          ></div>
+
+          <div class="space-y-12">
+            @for (exp of experiences; track exp.company + '-' + exp.role; let i = $index) {
+              <div
+                class="relative flex flex-col md:flex-row gap-8"
+                [class.md:flex-row-reverse]="i % 2 === 1"
+                [style.opacity]="visible() ? '1' : '0'"
+                [style.transform]="visible() ? 'translateY(0)' : 'translateY(30px)'"
+                [style.transition]="'opacity 0.6s ease ' + (i * 0.15) + 's, transform 0.6s ease ' + (i * 0.15) + 's'"
+              >
+                <!-- Dot on the line -->
+                <div class="absolute left-6 md:left-1/2 w-3 h-3 rounded-full bg-accent border-2 border-void -translate-x-1/2 mt-6 z-10 animate-pulse-glow"></div>
+
+                <!-- Date badge (desktop) -->
+                <div class="hidden md:flex w-[calc(50%-2rem)] items-start"
+                     [class.justify-end]="i % 2 === 0"
+                     [class.justify-start]="i % 2 === 1"
+                     [class.pr-8]="i % 2 === 0"
+                     [class.pl-8]="i % 2 === 1">
+                  <div class="text-right" [class.text-left]="i % 2 === 1">
+                    <span class="text-sm font-mono text-accent">{{ exp.period }}</span>
+                    <p class="text-xs text-muted mt-1">{{ exp.location }}</p>
+                  </div>
+                </div>
+
+                <!-- Card -->
+                <div class="ml-14 md:ml-0 md:w-[calc(50%-2rem)]"
+                     [class.md:pl-8]="i % 2 === 0"
+                     [class.md:pr-8]="i % 2 === 1">
+                  <div
+                    appTilt
+                    [maxTilt]="8"
+                    [scale]="1.02"
+                    class="p-6 rounded-2xl apple-glass card-hover"
+                  >
+                    <!-- Mobile date -->
+                    <span class="md:hidden text-xs font-mono text-accent block mb-2">{{ exp.period }}</span>
+
+                    <div class="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 class="font-display font-semibold text-frost text-lg">{{ exp.role }}</h3>
+                        <p class="text-accent text-sm font-medium">{{ exp.company }}</p>
+                      </div>
+                      <span class="text-xs text-muted bg-void px-2 py-1 rounded-lg border border-border font-mono whitespace-nowrap">
+                        {{ exp.type }}
+                      </span>
+                    </div>
+
+                    <ul class="space-y-2 mt-4">
+                      @for (point of exp.highlights; track point) {
+                        <li class="flex items-start gap-2 text-sm text-muted leading-relaxed">
+                          <span class="text-accent mt-1 shrink-0">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                          </span>
+                          {{ point }}
+                        </li>
+                      }
+                    </ul>
+
+                    <div class="flex flex-wrap gap-1.5 mt-5">
+                      @for (tag of exp.tags; track tag) {
+                        <span class="px-2 py-0.5 rounded text-xs bg-void border border-border text-muted font-mono">{{ tag }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+})
+export class ExperienceComponent implements OnInit {
+  visible = signal(false);
+  parallaxOffset = signal(0);
+
+  experiences = [
+    {
+      role: 'Software Engineer — Full Stack',
+      company: 'Liminal Custody',
+      period: 'Nov 2025 – Mar 2026',
+      location: 'Bengaluru, India',
+      type: 'Full-time',
+      highlights: [
+        'Backend developer for Wallet-as-a-Service (WaaS) platform enabling multi-signature & MPC wallet creation across BTC, ETH, SOL, Cosmos, and TRON blockchains',
+        'Engineered firewall policy system with 15+ RESTful APIs, implementing TypeORM atomic transactions & rollback for zero data loss in liminal-node-api',
+        'Decoupled WaaS operations into microservices (API, Signer, Jobs, Parser) using Kafka event brokers for real-time asynchronous transaction status parser-consumers',
+        'Developed security features supporting custody (type=1, management signed) and self-custody (type=2, customer signed) models with TRM screening/compliance integration',
+        'Configured variable-manager for centralized configuration across feature-env branches, and built Angular modules (Transaction Risk, Travel Rule) with RxJS state management',
+      ],
+      tags: ['Node.js', 'TypeScript', 'Angular', 'Kafka', 'Redis', 'TypeORM', 'Web3', 'gRPC'],
+    },
+    {
+      role: 'Full Stack Developer',
+      company: 'Light & Wonder (Scientific Games)',
+      period: 'Aug 2023 – Jul 2025',
+      location: 'Bengaluru, India',
+      type: 'Full-time',
+      highlights: [
+        'Built RESTful Web APIs in ASP.NET Core/C# for financial transaction system (Cage-Credit)',
+        'Developed Angular modules for Engage platform; reduced onboarding load times by ~20%',
+        'Engineered AI-driven error logging tool (React + .NET Core + LLM) reducing bug resolution by ~30%',
+        'Authored 750+ Cypress E2E test cases, reducing manual UI testing effort by 50%',
+      ],
+      tags: ['Angular', 'React', 'ASP.NET Core', 'C#', 'SQL Server', 'Cypress', 'TypeScript'],
+    },
+    {
+      role: 'Software Engineer Intern',
+      company: 'Light & Wonder (Scientific Games)',
+      period: 'Mar 2023 – Jul 2023',
+      location: 'Bengaluru, India',
+      type: 'Internship',
+      highlights: [
+        'Developed a comprehensive game recommendation system for casino gaming slot machines, incorporating user feedback and rating functionality to improve machine utilization and player engagement',
+      ],
+      tags: ['C#', 'ASP.NET Core', 'SQL Server', 'Algorithms'],
+    },
+  ];
+
+  timelineProgress = signal(0);
+
+  @HostListener('window:scroll')
+  onScroll() {
+    const scrollY = window.scrollY;
+    this.parallaxOffset.set(scrollY * 0.04);
+
+    // Calculate height of timeline progress line based on viewport bounding of experience element
+    const el = document.getElementById('experience');
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      // Calculate active scrolling within the section
+      const start = rect.top - viewportHeight * 0.4;
+      const end = rect.bottom - viewportHeight * 0.6;
+      const total = rect.height;
+      const current = viewportHeight * 0.4 - rect.top;
+
+      if (rect.top < viewportHeight * 0.4 && rect.bottom > viewportHeight * 0.6) {
+        const percent = Math.min(Math.max((current / total) * 100, 0), 100);
+        this.timelineProgress.set(percent);
+      } else if (rect.bottom <= viewportHeight * 0.6) {
+        this.timelineProgress.set(100);
+      } else {
+        this.timelineProgress.set(0);
+      }
+    }
+  }
+
+  ngOnInit() {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) this.visible.set(true); },
+      { threshold: 0.1 }
+    );
+    setTimeout(() => {
+      const el = document.querySelector('#experience');
+      if (el) observer.observe(el);
+    }, 100);
+  }
+}

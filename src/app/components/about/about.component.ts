@@ -1,0 +1,139 @@
+import { Component, OnInit, signal, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TiltDirective } from '../../directives/tilt.directive';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+
+@Component({
+  selector: 'app-about',
+  standalone: true,
+  imports: [CommonModule, TiltDirective, SafeHtmlPipe],
+  template: `
+    <section id="about" class="relative py-16 md:py-32 px-4 md:px-6 overflow-hidden">
+      <!-- Parallax decorative line -->
+      <div
+        class="absolute left-0 top-0 w-px h-full bg-gradient-to-b from-transparent via-accent/30 to-transparent pointer-events-none"
+        [style.transform]="'translateY(' + parallaxOffset() + 'px)'"
+      ></div>
+
+      <!-- Outline background texts -->
+      <div
+        class="absolute right-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        [style.transform]="'translate3d(' + (parallaxOffset() * -1.2) + 'px, 0, 0)'"
+      >
+        ARCHITECTURE
+      </div>
+      <div
+        class="absolute left-[-10%] bottom-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        [style.transform]="'translate3d(' + (parallaxOffset() * 1.2) + 'px, 0, 0)'"
+      >
+        SYSTEMS
+      </div>
+
+      <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+
+          <!-- Left: Text -->
+          <div [class.animate-slide-in-left]="visible()" [style.opacity]="visible() ? '1' : '0'" style="transition: opacity 0.7s">
+            <p class="text-accent font-mono text-xs tracking-widest uppercase mb-4">About Me</p>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-frost mb-6 leading-tight text-balance">
+              Passionate about
+              <span class="gradient-text">Architecture &amp; Code</span>
+            </h2>
+            <p class="text-muted leading-relaxed mb-4">
+              Full Stack Developer with 3+ years of experience building production-grade web applications
+              and APIs across FinTech, Web3 custody, and casino gaming domains.
+            </p>
+            <p class="text-muted leading-relaxed mb-6">
+              Equally comfortable building <span class="text-frost">Angular</span> and <span class="text-frost">React</span> frontends
+              as designing <span class="text-frost">Go</span> and <span class="text-frost">Node.js/Express</span> backend services.
+              Strong believer in clean architecture, security-first design, and agentic coding.
+            </p>
+
+            <!-- Quick stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+              @for (stat of stats; track stat.label) {
+                <div
+                  appTilt
+                  [maxTilt]="12"
+                  [scale]="1.05"
+                  class="text-center p-4 rounded-xl apple-glass hover:border-accent/40 transition-colors duration-300"
+                >
+                  <div class="text-3xl font-display font-bold gradient-text">{{ stat.value }}</div>
+                  <div class="text-xs text-muted mt-1 leading-tight">{{ stat.label }}</div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Right: Info cards -->
+          <div class="space-y-4" [style.opacity]="visible() ? '1' : '0'" style="transition: opacity 0.9s">
+            @for (card of cards; track card.title) {
+              <div
+                appTilt
+                [maxTilt]="8"
+                [scale]="1.02"
+                class="p-5 rounded-xl apple-glass card-hover"
+              >
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                    <span [innerHTML]="card.icon | safeHtml" class="text-accent"></span>
+                  </div>
+                  <div>
+                    <h3 class="font-semibold text-frost mb-1">{{ card.title }}</h3>
+                    <p class="text-sm text-muted leading-relaxed">{{ card.desc }}</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+        </div>
+      </div>
+    </section>
+  `,
+})
+export class AboutComponent implements OnInit {
+  visible = signal(false);
+  parallaxOffset = signal(0);
+
+  stats = [
+    { value: '3+', label: 'Years Experience' },
+    { value: '750+', label: 'Cypress Tests' },
+    { value: '15+', label: 'APIs Built' },
+  ];
+
+  cards = [
+    {
+      title: 'Education',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
+      desc: 'B.E. Computer Science — Siddaganga Institute of Technology, CGPA 8.65 (2019–2023)',
+    },
+    {
+      title: 'Location',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
+      desc: 'Bengaluru, India — Open to remote & hybrid opportunities worldwide',
+    },
+    {
+      title: 'Interests',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>',
+      desc: 'Agentic coding, distributed systems architecture, Web3, and open-source development',
+    },
+  ];
+
+  @HostListener('window:scroll')
+  onScroll() {
+    const offset = window.scrollY;
+    this.parallaxOffset.set(offset * 0.05);
+  }
+
+  ngOnInit() {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) this.visible.set(true); },
+      { threshold: 0, rootMargin: '0px 0px -80px 0px' }
+    );
+    setTimeout(() => {
+      const el = document.querySelector('#about');
+      if (el) observer.observe(el);
+    }, 200);
+  }
+}
